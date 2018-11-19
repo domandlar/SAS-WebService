@@ -25,6 +25,189 @@ function DeliverResponse($status, $message, $data)
     $json_response = json_encode($response);
     echo $json_response;
 }
+function PrijavaProfesora($email, $lozinka) //profesor
+{
+    $tekst = "";
+    $status = 0;
+    if (isset($email)) {
+        if (empty($email)) {
+            $tekst .= "Niste unijeli tekst. \n";
+        } else {
+
+        }
+    } else {
+        $tekst .= "Nedostaje parametar s emailom. \n";
+    }
+    if (isset($lozinka)) {
+        if (empty($lozinka)) {
+            $tekst .= "Niste unijeli lozinku. \n";
+        }
+    } else {
+        $upit = "SELECT * FROM profesor WHERE email='$email'";
+        $rez = DohvatiIzBaze($upit);
+        if ($rez->num_rows < 1) {
+            $tekst .= "Korisnik ne postoji u bazi. \n";
+        } else {
+            $row = mysqli_fetch_assoc($rez);
+            $lozinka = HashirajLozinku($row['email'], $lozinka);
+            $idProfesora = $row['id_profesora'];
+            $status = 1;
+            if ($lozinka != $row["lozinka"]) {
+                $tekst .= "Lozinke se ne podudaraju. \n";
+            }
+
+        }
+    }
+    if ($tekst == "") {
+        if ($status != 0) {
+            DeliverResponse('OK', 'Uspješna prijava', array('id_profesora' => $idProfesora));
+        } else {
+            DeliverResponse('OK', 'Došlo je do problema na webservisu', array('prijava' => "error"));
+        }
+    } else {
+        DeliverResponse('NOT OK', $tekst, array('prijava' => "error"));
+    }
+}
+function PrijavaStudenta($email, $lozinka)
+{
+    $tekst = "";
+    $status = 0;
+    if (isset($email)) {
+        if (empty($email)) {
+            $tekst .= "Niste unijeli tekst. \n";
+        } else {
+
+        }
+    } else {
+        $tekst .= "Nedostaje parametar s emailom. \n";
+    }
+    if (isset($lozinka)) {
+        if (empty($lozinka)) {
+            $tekst .= "Niste unijeli lozinku. \n";
+        }
+    } else {
+        $upit = "SELECT * FROM student WHERE email='$email'";
+        $rez = DohvatiIzBaze($upit);
+        if ($rez->num_rows < 1) {
+            $tekst .= "Korisnik ne postoji u bazi. \n";
+        } else {
+            $row = mysqli_fetch_assoc($rez);
+            $lozinka = HashirajLozinku($row['email'], $lozinka);
+            $idStudenta = $row['id_studenta'];
+            $status = 1;
+            if ($lozinka != $row["lozinka"]) {
+                $tekst .= "Lozinke se ne podudaraju. \n";
+            }
+
+        }
+    }
+    if ($tekst == "") {
+        if ($status != 0) {
+            DeliverResponse('OK', 'Uspješna prijava', array('id_studenta' => $idStudenta));
+        } else {
+            DeliverResponse('OK', 'Došlo je do problema na webservisu', array('prijava' => "error"));
+        }
+    } else {
+        DeliverResponse('NOT OK', $tekst, array('prijava' => "error"));
+    }
+}
+function RegistracijaProfesora($ime, $prezime, $titula)
+{
+    $tekst = "";
+    if (empty($ime)) {
+        $tekst .= "Nije uneseno ime. \n";
+    }
+
+    if (empty($prezime)) {
+        $tekst .= "Nije uneseno prezime. \n";
+    }
+
+    if (empty($titula)) {
+        $tekst .= "Nije unesena titula. \n";
+    }
+
+    if ($tekst == "") {
+        $email = IzgenerirajEmail($ime, $prezime);
+        $lozinka = IzgenerirajLozinku();
+        $hashiranaLozinka = HashirajLozinku($email, $lozinka);
+        $upit = "INSERT INTO profesor (ime, prezime, titula, email, lozinka) VALUES ('$ime', '$prezime', '$titula', '$email', '$hashiranaLozinka')";
+        DodajUBazu($upit);
+    }
+    if ($tekst == "") {
+        DeliverResponse('OK', 'Uspješna registracija', array('email' => $email, 'lozinka' => $lozinka));
+    } else {
+        DeliverResponse('NOT OK', $tekst, array('registracija' => "error"));
+    }
+}
+function RegistracijaStudenta($ime, $prezime)
+{
+    $tekst = "";
+    if (empty($ime)) {
+        $tekst .= "Nije uneseno ime. \n";
+    }
+
+    if (empty($prezime)) {
+        $tekst .= "Nije uneseno prezime. \n";
+    }
+
+    if ($tekst == "") {
+        $email = IzgenerirajEmail($ime, $prezime);
+        $lozinka = IzgenerirajLozinku();
+        $hashiranaLozinka = HashirajLozinku($email, $lozinka);
+        $upit = "INSERT INTO student (ime, prezime, email, lozinka) VALUES ('$ime', '$prezime', ' $email', '$hashiranaLozinka')";
+        DodajUBazu($upit);
+        $upit = "SELECT id_studenta FROM student ORDER BY 1 DESC LIMIT 1";
+        $rez = DohvatiIzBaze($upit);
+        $student = mysqli_fetch_assoc($rez);
+        SpremiSliku($student['id_studenta']);
+    }
+    if ($tekst == "") {
+        DeliverResponse('OK', 'Uspješna registracija', array('email' => $email, 'lozinka' => $lozinka));
+    } else {
+        DeliverResponse('NOT OK', $tekst, array('registracija' => "error"));
+    }
+}
+function IzgenerirajLozinku()
+{
+    $znakovi = "QWERTZUIOPASDFGHJKLYXCVBNMqwertzuiopasdfghjklyxcvbnm1234567890";
+    $lozinka = array();
+    for ($i = 0; $i < 8; $i++) {
+        $lozinka[i] = rand(strlen($znakovi) - 1);
+    }
+    return implode($lozinka);
+}
+function HashirajLozinku($email, $lozinka)
+{
+    $salt = hash("sha256", $email);
+    return hash('sha256', $lozinka . $salt);
+}
+function IzgenerirajEmail($ime, $prezime)
+{
+    while (true) {
+        $br = rand(3);
+        $email = substr($ime, 0, $br) . $prezime . "@foi.hr";
+        $upit = "SELECT email FROM profesor UNION student WHERE email = '$email'";
+        $rez = DohvatiIzBaze($upit);
+        if ($rez->num_rows == 0) {
+            break;
+        }
+    }
+    return $email;
+}
+function SpremiSliku($student)
+{
+    $slika = array();
+    $slika['name'] = $_FILES['slike']['name'];
+    $slika['tmp_name'] = $_FILES['slike']['tmp_name'];
+    $slika['size'] = $_FILES['slike']['size'];
+    $tipSlike = end(explode('.', $slika['name']));
+    $nazivSlike = uniqid('', true) . $tipSlike;
+    $link = 'slike/' . $student . '/' . $nazivSlike;
+    move_uploaded_file($slika['tmp_name'], $link);
+    $datum = date('Y:m:d');
+    $upit = "INSERT INTO slika (link, datum_slikanja, student_id) VALUES ('$nazivSlike', '$datum', '$student')";
+    DodajUBazu($upit);
+}
 function DohvatiKolegijeProfesora($profesor)
 {
     $tekst = "";
