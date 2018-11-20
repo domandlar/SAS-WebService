@@ -26,6 +26,7 @@ function DeliverResponse($status, $message, $data)
     echo $json_response;
 }
 function PrijavaProfesora($email, $lozinka) //profesor
+
 {
     $tekst = "";
     $status = 0;
@@ -172,7 +173,8 @@ function IzgenerirajLozinku()
     $znakovi = "QWERTZUIOPASDFGHJKLYXCVBNMqwertzuiopasdfghjklyxcvbnm1234567890";
     $lozinka = array();
     for ($i = 0; $i < 8; $i++) {
-        $lozinka[i] = rand(strlen($znakovi) - 1);
+        $n = rand(0, strlen($znakovi) - 1);
+        $lozinka[] = $znakovi[$n];
     }
     return implode($lozinka);
 }
@@ -183,16 +185,30 @@ function HashirajLozinku($email, $lozinka)
 }
 function IzgenerirajEmail($ime, $prezime)
 {
+    $ime2 = PrepraviHrvatskeZnakove($ime);
+    $prezime2 = PrepraviHrvatskeZnakove($prezime);
+    $ime1 = strtolower($ime2);
+    $prezime1 = strtolower($prezime2);
     while (true) {
-        $br = rand(3);
-        $email = substr($ime, 0, $br) . $prezime . "@foi.hr";
+        $br = rand(1, 3);
+        $email = substr($ime1, 0, $br) . $prezime1 . "@foi.hr";
         $upit = "SELECT email FROM profesor UNION student WHERE email = '$email'";
         $rez = DohvatiIzBaze($upit);
-        if ($rez->num_rows == 0) {
+        if (true/*$rez->num_rows == 0*/) {
             break;
         }
     }
     return $email;
+}
+function PrepraviHrvatskeZnakove($tekst)
+{
+    $tekst = iconv("UTF-8", "ISO-8859-1//TRANSLIT", $tekst);
+    for ($i = 0; $i < strlen($tekst); $i++) {
+        if(ord($tekst[$i])==180)
+            $tekst[$i]=" ";
+    }
+    $noviTekst = explode(" ",$tekst);
+    return implode($noviTekst);
 }
 function SpremiSliku($student)
 {

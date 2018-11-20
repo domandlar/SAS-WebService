@@ -5,7 +5,7 @@ class Baza {
     const server = "localhost";
     const korisnik = "root";
     const lozinka = "";
-    const baza = "";
+    const baza = "id7653434_sas";
 
     private $veza = null;
     private $greska = '';
