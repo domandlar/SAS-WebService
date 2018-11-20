@@ -118,7 +118,7 @@ function PrijavaStudenta($email, $lozinka)
         DeliverResponse('NOT OK', $tekst, array('prijava' => "error"));
     }
 }
-function RegistracijaProfesora($ime, $prezime, $titula)
+function RegistracijaProfesora($ime, $prezime, $email, $titula)
 {
     $tekst = "";
     if (empty($ime)) {
@@ -128,13 +128,15 @@ function RegistracijaProfesora($ime, $prezime, $titula)
     if (empty($prezime)) {
         $tekst .= "Nije uneseno prezime. \n";
     }
+    if (empty($email)) {
+        $tekst .= "Nije unesen email. \n";
+    }
 
     if (empty($titula)) {
         $tekst .= "Nije unesena titula. \n";
     }
 
     if ($tekst == "") {
-        $email = IzgenerirajEmail($ime, $prezime);
         $lozinka = IzgenerirajLozinku();
         $hashiranaLozinka = HashirajLozinku($email, $lozinka);
         $upit = "INSERT INTO profesor (ime, prezime, titula, email, lozinka) VALUES ('$ime', '$prezime', '$titula', '$email', '$hashiranaLozinka')";
@@ -146,7 +148,7 @@ function RegistracijaProfesora($ime, $prezime, $titula)
         DeliverResponse('NOT OK', $tekst, array('registracija' => "error"));
     }
 }
-function RegistracijaStudenta($ime, $prezime)
+function RegistracijaStudenta($ime, $prezime, $email)
 {
     $tekst = "";
     if (empty($ime)) {
@@ -156,9 +158,11 @@ function RegistracijaStudenta($ime, $prezime)
     if (empty($prezime)) {
         $tekst .= "Nije uneseno prezime. \n";
     }
+    if (empty($email)) {
+        $tekst .= "Nije unesen email. \n";
+    }
 
     if ($tekst == "") {
-        $email = IzgenerirajEmail($ime, $prezime);
         $lozinka = IzgenerirajLozinku();
         $hashiranaLozinka = HashirajLozinku($email, $lozinka);
         $upit = "INSERT INTO student (ime, prezime, email, lozinka) VALUES ('$ime', '$prezime', '$email', '$hashiranaLozinka')";
@@ -188,34 +192,6 @@ function HashirajLozinku($email, $lozinka)
 {
     $salt = hash("sha256", $email);
     return hash('sha256', $lozinka . $salt);
-}
-
-function IzgenerirajEmail($ime, $prezime)
-{
-    $ime2 = PrepraviHrvatskeZnakove($ime);
-    $prezime2 = PrepraviHrvatskeZnakove($prezime);
-    $ime1 = strtolower($ime2);
-    $prezime1 = strtolower($prezime2);
-    while (true) {
-        $br = rand(1, 3);
-        $email = substr($ime1, 0, $br) . $prezime1 . "@foi.hr";
-        $upit = "SELECT email FROM profesor UNION student WHERE email = '$email'";
-        $rez = DohvatiIzBaze($upit);
-        if (true/*$rez->num_rows == 0*/) {
-            break;
-        }
-    }
-    return $email;
-}
-function PrepraviHrvatskeZnakove($tekst)
-{
-    $tekst = iconv("UTF-8", "ISO-8859-1//TRANSLIT", $tekst);
-    for ($i = 0; $i < strlen($tekst); $i++) {
-        if(ord($tekst[$i])==180)
-            $tekst[$i]=" ";
-    }
-    $noviTekst = explode(" ",$tekst);
-    return implode($noviTekst);
 }
 function SpremiSliku($student)
 {
