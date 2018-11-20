@@ -213,11 +213,15 @@ function PrepraviHrvatskeZnakove($tekst)
 function SpremiSliku($student)
 {
     $slika = array();
-    $slika['name'] = $_FILES['slike']['name'];
-    $slika['tmp_name'] = $_FILES['slike']['tmp_name'];
-    $slika['size'] = $_FILES['slike']['size'];
+    $slika['name'] = $_FILES['slika']['name'];
+    $slika['tmp_name'] = $_FILES['slika']['tmp_name'];
+    $slika['size'] = $_FILES['slika']['size'];
     $tipSlike = end(explode('.', $slika['name']));
-    $nazivSlike = uniqid('', true) . $tipSlike;
+    $nazivSlike = uniqid('', true) . '.' . $tipSlike;
+    if(!is_dir("slike"))
+        mkdir("slike");
+    if(!is_dir($student))
+        mkdir("slike/" . $student);
     $link = 'slike/' . $student . '/' . $nazivSlike;
     move_uploaded_file($slika['tmp_name'], $link);
     $datum = date('Y:m:d');
