@@ -7,10 +7,10 @@ if (isset($_GET)) {
     if (!empty($_GET['metoda'])) {
         if($_GET['metoda']=='registracija') {
             if ($_GET['uloga'] == 'profesor') {
-                RegistracijaProfesora($_GET['ime'], $_GET['prezime'], $_GET['titula']);
+                RegistracijaProfesora($_POST['ime'], $_POST['prezime'], $_POST['titula']);
             }
             if ($_GET['uloga'] == 'student') {
-                RegistracijaStudenta($_GET['ime'], $_GET['prezime']);
+                RegistracijaStudenta($_POST['ime'], $_POST['prezime']);
             }
         }
         if($_GET['metoda']=='prijava'){

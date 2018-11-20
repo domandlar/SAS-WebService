@@ -1,8 +1,5 @@
-AddDefaultCharset UTF-8
 Options +FollowSymLinks
 RewriteEngine On
 
-RewriteRule ^registracija/(.*)/(.*)/(.*)/(.*)/$ rest.php?metoda=registracija&uloga=$1&ime=$2&prezime=$3&titula=$4
-RewriteRule ^registracija/(.*)/(.*)/(.*)/$ rest.php?metoda=registracija&uloga=$1&ime=$2&prezime=$3
-
+RewriteRule ^registracija/(.*)/$ rest.php?metoda=registracija&uloga=$1
 RewriteRule ^prijava/(.*)/(.*)/(.*)/$ rest.php?metoda=prijava&uloga=$1&email=$2&lozinka=$3
