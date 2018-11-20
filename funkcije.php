@@ -100,7 +100,6 @@ function PrijavaStudenta($email, $lozinka)
             $lozinka = HashirajLozinku($row['email'], $lozinka);
             $idStudenta = $row['id_studenta'];
             $status = 1;
-            echo $lozinka . '<br>' . $row['lozinka'];
             if ($lozinka != $row["lozinka"]) {
                 $tekst .= "Lozinke se ne podudaraju. \n";
             }
