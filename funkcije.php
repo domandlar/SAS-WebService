@@ -25,8 +25,7 @@ function DeliverResponse($status, $message, $data)
     $json_response = json_encode($response);
     echo $json_response;
 }
-function PrijavaProfesora($email, $lozinka) //profesor
-
+function PrijavaProfesora($email, $lozinka)
 {
     $tekst = "";
     $status = 0;
@@ -44,6 +43,9 @@ function PrijavaProfesora($email, $lozinka) //profesor
             $tekst .= "Niste unijeli lozinku. \n";
         }
     } else {
+        $tekst .= "Nedostaje parametar s emailom. \n";
+    }
+    if(!empty($email) && !empty($lozinka)){
         $upit = "SELECT * FROM profesor WHERE email='$email'";
         $rez = DohvatiIzBaze($upit);
         if ($rez->num_rows < 1) {
@@ -56,7 +58,6 @@ function PrijavaProfesora($email, $lozinka) //profesor
             if ($lozinka != $row["lozinka"]) {
                 $tekst .= "Lozinke se ne podudaraju. \n";
             }
-
         }
     }
     if ($tekst == "") {
@@ -75,7 +76,7 @@ function PrijavaStudenta($email, $lozinka)
     $status = 0;
     if (isset($email)) {
         if (empty($email)) {
-            $tekst .= "Niste unijeli tekst. \n";
+            $tekst .= "Niste unijeli email. \n";
         } else {
 
         }
@@ -87,21 +88,26 @@ function PrijavaStudenta($email, $lozinka)
             $tekst .= "Niste unijeli lozinku. \n";
         }
     } else {
+        $tekst .= "Nedostaje parametar s lozinkom. \n";
+    }
+    if(!empty($email) && !empty($lozinka)){
         $upit = "SELECT * FROM student WHERE email='$email'";
         $rez = DohvatiIzBaze($upit);
         if ($rez->num_rows < 1) {
             $tekst .= "Korisnik ne postoji u bazi. \n";
         } else {
-            $row = mysqli_fetch_assoc($rez);
+            $row = mysqli_fetch_assoc($rez);          
             $lozinka = HashirajLozinku($row['email'], $lozinka);
             $idStudenta = $row['id_studenta'];
             $status = 1;
+            echo $lozinka . '<br>' . $row['lozinka'];
             if ($lozinka != $row["lozinka"]) {
                 $tekst .= "Lozinke se ne podudaraju. \n";
             }
 
         }
     }
+    
     if ($tekst == "") {
         if ($status != 0) {
             DeliverResponse('OK', 'Uspješna prijava', array('id_studenta' => $idStudenta));
@@ -155,7 +161,7 @@ function RegistracijaStudenta($ime, $prezime)
         $email = IzgenerirajEmail($ime, $prezime);
         $lozinka = IzgenerirajLozinku();
         $hashiranaLozinka = HashirajLozinku($email, $lozinka);
-        $upit = "INSERT INTO student (ime, prezime, email, lozinka) VALUES ('$ime', '$prezime', ' $email', '$hashiranaLozinka')";
+        $upit = "INSERT INTO student (ime, prezime, email, lozinka) VALUES ('$ime', '$prezime', '$email', '$hashiranaLozinka')";
         DodajUBazu($upit);
         $upit = "SELECT id_studenta FROM student ORDER BY 1 DESC LIMIT 1";
         $rez = DohvatiIzBaze($upit);
@@ -183,6 +189,7 @@ function HashirajLozinku($email, $lozinka)
     $salt = hash("sha256", $email);
     return hash('sha256', $lozinka . $salt);
 }
+
 function IzgenerirajEmail($ime, $prezime)
 {
     $ime2 = PrepraviHrvatskeZnakove($ime);
