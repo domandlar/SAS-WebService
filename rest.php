@@ -21,5 +21,11 @@ if (isset($_GET)) {
                  PrijavaStudenta($_GET['email'], $_GET['lozinka']);
             }
         }
+        if($_GET['metoda']=='kolegij'){
+            if ($_GET['akcija'] == 'dohvati') {
+                DohvatiKolegijeProfesora($_GET['id']);
+            }
+            
+        }
     }
 }
