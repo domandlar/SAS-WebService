@@ -1,10 +1,10 @@
-<?php
+﻿<?php
 
 class Baza {
 
     const server = "localhost";
-    const korisnik = "root";
-    const lozinka = "";
+    const korisnik = "id7653434_sas";
+    const lozinka = "attendance";
     const baza = "id7653434_sas";
 
     private $veza = null;
