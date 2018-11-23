@@ -18,13 +18,13 @@ if (isset($_GET)) {
                 PrijavaProfesora($_GET['email'], $_GET['lozinka']);
             }
             if ($_GET['uloga'] == 'student') {
-                 PrijavaStudenta($_GET['email'], $_GET['lozinka']);
+                PrijavaStudenta($_GET['email'], $_GET['lozinka']);
             }
         }
         if($_GET['metoda']=='kolegij'){
-            if($_GET['akcija']=='all'){
+            if($_GET['akcija']=='dohvati'){
                 if($_GET['uloga']=='profesor'){
-                    DohvatiKolegijeProfesora($_GET['id']);
+                    DohvatiKolegijeProfesora($_GET['idUloge']);
                 }
                 if($_GET['uloga']=='student'){
                     //DohvatiKolegijeStudenta($_GET['id']);
