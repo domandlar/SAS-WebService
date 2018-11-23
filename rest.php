@@ -21,5 +21,48 @@ if (isset($_GET)) {
                  PrijavaStudenta($_GET['email'], $_GET['lozinka']);
             }
         }
+        if($_GET['metoda']=='kolegij'){
+            if($_GET['akcija']=='all'){
+                if($_GET['uloga']=='profesor'){
+                    DohvatiKolegijeProfesora($_GET['id']);
+                }
+                if($_GET['uloga']=='student'){
+                    //DohvatiKolegijeStudenta($_GET['id']);
+                }
+            }
+            if($_GET['akcija']=='novi'){
+
+            }
+            if($_GET['akcija']=='azuriraj'){
+                
+            }
+            if($_GET['akcija']=='obrisi'){
+                
+            }
+        }
+        if($_GET['metoda']=='aktivnost'){
+            if($_GET['akcija']=='dohvati'){
+                if($_GET['uloga']=='profesor'){
+                    if($_GET['tipAktivnosti'] == 'all'){
+                        
+                    }
+                    else{
+                        DohvatiAktivnostiProfesoraPoTipuAktivnosti($_GET['idUloge'], $_GET['tipAktivnosti']);
+                    }
+                }
+                if($_GET['uloga']=='student'){
+                    //DohvatiKolegijeStudenta($_GET['id']);
+                }
+            }
+            if($_GET['akcija']=='nova'){
+
+            }
+            if($_GET['akcija']=='azuriraj'){
+                
+            }
+            if($_GET['akcija']=='obrisi'){
+                
+            }
+        }
     }
 }

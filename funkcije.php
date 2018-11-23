@@ -214,7 +214,7 @@ function DohvatiKolegijeProfesora($profesor)
 {
     $tekst = "";
     $kolegiji = array();
-    $upit = "SELECT * FROM kolegij JOIN profesor_has_kolegij ON id_kolegija=kolegij_id JOIN profesor ON profesr_id=id_profesora WHERE id_profesora='$profesor'";
+    $upit = "SELECT * FROM kolegij JOIN profesor_has_kolegij ON id_kolegija=kolegij_id JOIN profesor ON profesor_id=id_profesora WHERE id_profesora='$profesor'";
     $rez = DohvatiIzBaze($upit);
     if ($rez->num_rows > 0) {
         while ($row = $rez->mysqli_fetch_assoc()) {
@@ -234,7 +234,7 @@ function DohvatiAktivnostiProfesora($profesor)
 {
     $tekst = "";
     $aktivnosti = array();
-    $upit = "SELECT * FROM aktivnost JOIN profesor_has_aktivnost ON id_aktivnosti=aktivnost_id JOIN profesor ON profesr_id=id_profesora JOIN dvorana ON id_dvorane=dvorana_id WHERE id_profesora='$profesor'";
+    $upit = "SELECT * FROM aktivnost JOIN aktivnost_has_profesor ON id_aktivnosti=aktivnost_id JOIN profesor ON profesor_id=id_profesora JOIN dvorana ON id_dvorane=dvorana_id WHERE id_profesora='$profesor'";
     $rez = DohvatiIzBaze($upit);
     if ($rez->num_rows > 0) {
         while ($row = $rez->mysqli_fetch_assoc()) {
@@ -253,23 +253,24 @@ function DohvatiAktivnostiProfesora($profesor)
 function DohvatiAktivnostiProfesoraPoTipuAktivnosti($profesor, $tipAktivnost)
 {
     $tekst = "";
-    $kolegiji = array();
-    $upit = "SELECT * FROM kolegij JOIN profesor_has_kolegij ON id_kolegija=kolegij_id JOIN profesor ON profesr_id=id_profesora WHERE id_profesora='$profesor'";
+    $aktivnosti = array();
+    $tipAktivnost = DohvatiIdTipaAktivnosti($tipAktivnost);
+    $upit = "SELECT id_aktivnosti, dozvoljeno_izostanaka, pocetak, kraj, dan_izvodenja, dvorana.naziv dvorana, kolegij.naziv kolegij FROM aktivnost JOIN aktivnost_has_profesor ON id_aktivnosti=aktivnost_id JOIN profesor ON profesor_id=id_profesora 
+    JOIN dvorana ON id_dvorane=dvorana_id JOIN kolegij ON kolegij_id=id_kolegija WHERE id_profesora='$profesor' AND tip_aktivnosti='$tipAktivnost'";
     $rez = DohvatiIzBaze($upit);
     if ($rez->num_rows > 0) {
         while ($row = $rez->mysqli_fetch_assoc()) {
-            $pom = array('id' => $row["id_kolegija"], 'naziv' => $row["naziv"], 'semestar' => $row["semestar"], 'studij' => $row["studij"]);
-            array_push($kolegiji, $pom);
+            $pom = array('id' => $row["id_aktivnosti"], 'kolegij' => $row["kolegij"], 'dan_izvodenja' => $row["dan_izvodenja"], 'pocetak' => $row["pocetak"], 'kraj' => $row["kraj"], 'dozvoljeno_izostanaka' => $row["dozvoleno_izostanaka"], 'dvorana' => $row["dvorana"]);
+            array_push($aktivnosti, $pom);
         }
         $message = "Pronađene aktivnosti.";
         DeliverResponse('OK', $message, $aktivnosti);
     } else {
         $pom = array('id' => "-1", 'naziv' => "");
-        array_push($vrsta, $pom);
+        array_push($aktivnosti, $pom);
         $message = "Nema zapisa u bazi.";
         DeliverResponse('NOT OK', $message, $aktivnosti);
     }
-    //Završit!!!!
 }
 function DohvatiAktivnostiProfesoraPoKolegiju($profesor, $kolegij)
 {
@@ -291,6 +292,13 @@ function DohvatiAktivnostiProfesoraPoKolegiju($profesor, $kolegij)
         DeliverResponse('NOT OK', $message, $aktivnosti);
     }
     //Završit!!!!
+}
+function DohvatiIdTipaAktivnosti($nazivTipaAktivnosti)
+{
+    $upit = "SELECT id_tip_aktivnost WHERE naziv ='$nazivTipaAktivnosti'";
+    $rez = DohvatiIzBaze($upit);
+    $row = mysqli_fetch_assoc($rez);
+    return $row['id_tip_aktivnosti'];
 }
 function DohvacanjeEvidencije($kolegij, $aktivnost)
 {
