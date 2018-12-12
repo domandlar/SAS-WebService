@@ -230,10 +230,10 @@ function DohvatiKolegijeProfesora($profesor)
         DeliverResponse('NOT OK', $message, $kolegiji);
     }
 }
-function DohvatiDvorane(){
+function DohvatiDvorane($tipDvorane){
     $tekst = "";
     $dvorane = array();
-    $upit = "SELECT * FROM dvorana";
+    $upit = "SELECT * FROM dvorana WHERE tip_dvorane = '$tipDvorane'";
     $rez = DohvatiIzBaze($upit);
     if ($rez->num_rows > 0) {
         while ($row = mysqli_fetch_assoc($rez)) {

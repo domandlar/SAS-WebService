@@ -42,7 +42,7 @@ if (isset($_GET)) {
         }
         if($_GET['metoda']=='dvorana'){
             if($_GET['akcija']=='dohvati'){
-                    DohvatiDvorane();    
+                    DohvatiDvorane($_GET['tipDvorane']);    
             }
         }
         if($_GET['metoda']=='aktivnost'){
