@@ -230,6 +230,25 @@ function DohvatiKolegijeProfesora($profesor)
         DeliverResponse('NOT OK', $message, $kolegiji);
     }
 }
+function DohvatiDvorane(){
+    $tekst = "";
+    $dvorane = array();
+    $upit = "SELECT * FROM dvorana";
+    $rez = DohvatiIzBaze($upit);
+    if ($rez->num_rows > 0) {
+        while ($row = mysqli_fetch_assoc($rez)) {
+            $pom = array('id_dvorane' => $row["id_dvorane"], 'naziv' => $row["naziv"], 'kapacitet' => $row["kapacitet"]);
+            array_push($dvorane, $pom);
+        }
+        $message = "Pronađene dvorane.";
+        DeliverResponse('OK', $message, $dvorane);
+    } else {
+        $pom = array('id' => "-1", 'naziv' => "");
+        array_push($kolegiji, $pom);
+        $message = "Nema zapisa u bazi.";
+        DeliverResponse('NOT OK', $message, $kolegiji);
+    }
+}
 function DohvatiAktivnostiProfesora($profesor)
 {
     $tekst = "";
@@ -271,6 +290,28 @@ function DohvatiAktivnostiProfesoraPoTipuAktivnosti($profesor, $tipAktivnost)
         $message = "Nema zapisa u bazi.";
         DeliverResponse('NOT OK', $message, $aktivnosti);
     }
+}
+function DodajAktivnostProfesoraPoTipuAktivnosti($profesor,$tipAktivnost){
+    /*
+    $tekst = "";
+    $aktivnosti = array();
+    $tipAktivnost = DohvatiIdTipaAktivnosti($tipAktivnost);
+    $upit = "SELECT id_aktivnosti, dozvoljeno_izostanaka, pocetak, kraj, dan_izvodenja, dvorana.naziv dvorana, kolegij.naziv kolegij FROM aktivnost JOIN aktivnost_has_profesor ON id_aktivnosti=aktivnost_id JOIN profesor ON profesor_id=id_profesora 
+    JOIN dvorana ON id_dvorane=dvorana_id JOIN kolegij ON kolegij_id=id_kolegija WHERE id_profesora='$profesor' AND tip_aktivnosti_id='$tipAktivnost'";
+    $rez = DohvatiIzBaze($upit);
+    if ($rez->num_rows > 0) {
+        while ($row = mysqli_fetch_assoc($rez)) {
+            $pom = array('id' => $row["id_aktivnosti"], 'kolegij' => $row["kolegij"], 'dan_izvodenja' => $row["dan_izvodenja"], 'pocetak' => $row["pocetak"], 'kraj' => $row["kraj"], 'dozvoljeno_izostanaka' => $row["dozvoleno_izostanaka"], 'dvorana' => $row["dvorana"]);
+            array_push($aktivnosti, $pom);
+        }
+        $message = "Pronađene aktivnosti.";
+        DeliverResponse('OK', $message, $aktivnosti);
+    } else {
+        $pom = array('id' => "-1", 'naziv' => "");
+        array_push($aktivnosti, $pom);
+        $message = "Nema zapisa u bazi.";
+        DeliverResponse('NOT OK', $message, $aktivnosti);
+    }*/
 }
 function DohvatiAktivnostiProfesoraPoKolegiju($profesor, $kolegij)
 {

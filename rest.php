@@ -40,13 +40,18 @@ if (isset($_GET)) {
                 
             }
         }
+        if($_GET['metoda']=='dvorana'){
+            if($_GET['akcija']=='dohvati'){
+                    DohvatiDvorane();    
+            }
+        }
         if($_GET['metoda']=='aktivnost'){
             if($_GET['akcija']=='dohvati'){
                 if($_GET['uloga']=='profesor'){
                     if($_GET['tipAktivnosti'] == 'all'){
                         
                     }
-                    else{
+                    else if($_GET['tipAktivnosti'] == 'seminar'){
                         DohvatiAktivnostiProfesoraPoTipuAktivnosti($_GET['idUloge'], $_GET['tipAktivnosti']);
                     }
                 }
