@@ -336,7 +336,6 @@ function DohvatiAktivnostiProfesoraPoKolegiju($profesor, $kolegij)
 }
 function DohvatiIdTipaAktivnosti($nazivTipaAktivnosti)
 {
-    echo $nazivTipaAktivnosti;
     $upit = "SELECT id_tip_aktivnosti FROM tip_aktivnosti WHERE naziv ='$nazivTipaAktivnosti'";
     $rez = DohvatiIzBaze($upit);
     $row = mysqli_fetch_assoc($rez);
