@@ -291,27 +291,22 @@ function DohvatiAktivnostiProfesoraPoTipuAktivnosti($profesor, $tipAktivnost)
         DeliverResponse('NOT OK', $message, $aktivnosti);
     }
 }
-function DodajAktivnostProfesoraPoTipuAktivnosti($profesor,$tipAktivnost){
-    /*
+
+function DodajAktivnostProfesora($profesor, $dozvoljenoIzostanaka, $pocetak, $kraj, $danIzvodenja, $dvorana, $kolegij, $tipAktivnost){
     $tekst = "";
     $aktivnosti = array();
     $tipAktivnost = DohvatiIdTipaAktivnosti($tipAktivnost);
-    $upit = "SELECT id_aktivnosti, dozvoljeno_izostanaka, pocetak, kraj, dan_izvodenja, dvorana.naziv dvorana, kolegij.naziv kolegij FROM aktivnost JOIN aktivnost_has_profesor ON id_aktivnosti=aktivnost_id JOIN profesor ON profesor_id=id_profesora 
-    JOIN dvorana ON id_dvorane=dvorana_id JOIN kolegij ON kolegij_id=id_kolegija WHERE id_profesora='$profesor' AND tip_aktivnosti_id='$tipAktivnost'";
+    $upit = "INSERT INTO aktivnost (dozvoljeno_izostanaka, pocetak, kraj, dan_izvodenja, dvorana_id, kolegij_id, tip_aktivnosti_id) 
+    VALUES ('$dozvoljenoIzostanaka', '$pocetak', '$kraj', '$danIzvodenja', '$dvorana', '$kolegij', '$tipAktivnost')";
+    DodajUBazu($upit);
+    $upit = "SELECT id_aktivnosti FROM aktivnost ORDER BY 1 DESC LIMIT 1";
     $rez = DohvatiIzBaze($upit);
-    if ($rez->num_rows > 0) {
-        while ($row = mysqli_fetch_assoc($rez)) {
-            $pom = array('id' => $row["id_aktivnosti"], 'kolegij' => $row["kolegij"], 'dan_izvodenja' => $row["dan_izvodenja"], 'pocetak' => $row["pocetak"], 'kraj' => $row["kraj"], 'dozvoljeno_izostanaka' => $row["dozvoleno_izostanaka"], 'dvorana' => $row["dvorana"]);
-            array_push($aktivnosti, $pom);
-        }
-        $message = "Pronađene aktivnosti.";
-        DeliverResponse('OK', $message, $aktivnosti);
-    } else {
-        $pom = array('id' => "-1", 'naziv' => "");
-        array_push($aktivnosti, $pom);
-        $message = "Nema zapisa u bazi.";
-        DeliverResponse('NOT OK', $message, $aktivnosti);
-    }*/
+    $row = mysqli_fetch_assoc($rez);
+    $aktivnost = $row['id_aktivnosti'];
+    $upit = "INSERT INTO aktivnost_has_profesor (aktivnost_id, profesor_id) VALUES ('$aktivnost', '$profesor')";
+    DodajUBazu($upit);
+    $message = "Korisnik je dodan u bazu.";
+    DeliverResponse("OK", $message, "");
 }
 function DohvatiAktivnostiProfesoraPoKolegiju($profesor, $kolegij)
 {
