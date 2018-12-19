@@ -51,8 +51,16 @@ if (isset($_GET)) {
                     if($_GET['tipAktivnosti'] == 'all'){
                         
                     }
-                    else if($_GET['tipAktivnosti'] == 'seminar'){
+                    else /*if($_GET['tipAktivnosti'] == 'seminar')*/{
                         DohvatiAktivnostiProfesoraPoTipuAktivnosti($_GET['idUloge'], $_GET['tipAktivnosti']);
+                    }
+                }
+                else if($_GET['uloga']=='student'){
+                    if($_GET['tipAktivnosti'] == 'all'){
+                        
+                    }
+                    else /*if($_GET['tipAktivnosti'] == 'seminar')*/{
+                        DohvatiAktivnostiStudentaPoTipuAktivnosti($_GET['idUloge'], $_GET['tipAktivnosti']);
                     }
                 }
                 if($_GET['uloga']=='student'){
