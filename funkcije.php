@@ -232,7 +232,7 @@ function DohvatiKolegijeProfesora($profesor)
 }
 function DodajKolegij($naziv, $semestar, $studij)
 {
-	tekst = "";
+	$tekst = "";
     $kolegiji = array();
     $upit = "INSERT INTO kolegij (naziv, semestar, studij) 
     VALUES ('$naziv', '$semestar', '$studij')";
