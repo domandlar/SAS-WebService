@@ -230,6 +230,16 @@ function DohvatiKolegijeProfesora($profesor)
         DeliverResponse('NOT OK', $message, $kolegiji);
     }
 }
+function DodajKolegij($naziv, $semestar, $studij)
+{
+	tekst = "";
+    $kolegiji = array();
+    $upit = "INSERT INTO kolegij (naziv, semestar, studij) 
+    VALUES ('$naziv', '$semestar', '$studij')";
+    DodajUBazu($upit);
+    $message = "Kolegij je dodan u bazu.";
+    DeliverResponse("OK", $message, "");
+}
 function DohvatiDvorane($tipDvorane){
     $tekst = "";
     $dvorane = array();
