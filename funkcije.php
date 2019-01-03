@@ -233,17 +233,15 @@ function DohvatiKolegijeProfesora($profesor)
 function DodajKolegij($naziv, $semestar, $studij)
 {
 	$tekst = "";
-    $upit = "INSERT INTO kolegij (naziv, semestar, studij) 
-    VALUES ('$naziv', '$semestar', '$studij')";
+    $upit = "INSERT INTO kolegij (naziv, semestar, studij) VALUES ('$naziv', '$semestar', '$studij')";
     DodajUBazu($upit);
     $message = "Kolegij je dodan u bazu.";
     DeliverResponse("OK", $message, "");
 }
-
 function AzurirajKolegij($idKolegija, $naziv, $semestar, $studij)
 {
 	$tekst = "";
-    $upit ="UPDATE `kolegij` SET `naziv` = '$naziv', `semestar` = '$semestar', `studij` = '$studij' WHERE `kolegij`.`id_kolegija` = '$idKolegija';" 
+    $upit ="UPDATE kolegij SET naziv='$naziv', semestar='$semestar', studij='$studij' WHERE id_kolegija='$idKolegija'"; 
     DodajUBazu($upit);
     $message = "Kolegij je ažururan.";
     DeliverResponse("OK", $message, "");
@@ -251,10 +249,11 @@ function AzurirajKolegij($idKolegija, $naziv, $semestar, $studij)
 function ObrisiKolegij($idKolegija)
 {
 	$tekst = "";
-    $upit ="DELETE FROM `kolegij` WHERE `kolegij`.`id_kolegija` = '$idKolegija';" 
+    $upit ="DELETE FROM kolegij WHERE id_kolegija='$idKolegija'"; 
     DodajUBazu($upit);
     $message = "Kolegij je obrisan.";
     DeliverResponse("OK", $message, "");
+	//Dovršiti
 }
 function DohvatiDvorane($tipDvorane){
     $tekst = "";
