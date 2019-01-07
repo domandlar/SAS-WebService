@@ -79,5 +79,11 @@ if (isset($_GET)) {
                 
             }
         }
+        if($_GET['metoda']=='kolegij'){
+            if ($_GET['akcija'] == 'dohvati') {
+                DohvatiKolegijeProfesora($_GET['id']);
+            }
+            
+        }
     }
 }
