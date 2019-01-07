@@ -303,7 +303,28 @@ function DohvatiAktivnostiProfesoraPoDanuIzvodenja($profesor, $danIzvodenja)
     $rez = DohvatiIzBaze($upit);
     if ($rez->num_rows > 0) {
         while ($row = mysqli_fetch_assoc($rez)) {
-            $pom = array('id' => $row["id_aktivnosti"], 'kolegij' => $row["kolegij"], 'tip_aktivnosti' => $row["tip_aktivnosti"], 'pocetak' => $row["pocetak"], 'kraj' => $row["kraj"], 'dvorana' => $row["dvorana"], 'dan_izvodenja' => $row["dan_izvođenja"]);
+            $pom = array('id' => $row["id_aktivnosti"], 'kolegij' => $row["kolegij"], 'tip_aktivnosti' => $row["tip_aktivnosti"], 'pocetak' => $row["pocetak"], 'kraj' => $row["kraj"], 'dvorana' => $row["dvorana"], 'dan_izvodenja' => $row["dan_izvodenja"]);
+            array_push($aktivnosti, $pom);
+        }
+        $message = "Pronađene aktivnosti.";
+        DeliverResponse('OK', $message, $aktivnosti);
+    } else {
+        $pom = array('id' => "-1", 'naziv' => "");
+        array_push($aktivnosti, $pom);
+        $message = "Nema zapisa u bazi.";
+        DeliverResponse('NOT OK', $message, $aktivnosti);
+    }
+}
+function DohvatiAktivnostiStudentaPoDanuIzvodenja($student, $danIzvodenja)
+{
+    $tekst = "";
+    $aktivnosti = array();
+    $upit = "SELECT id_aktivnosti, kolegij.naziv kolegij, tip_aktivnosti.naziv tip_aktivnosti, pocetak, kraj, dvorana.naziv dvorana, dan_izvodenja FROM aktivnost JOIN student_has_aktivnost ON id_aktivnosti=aktivnost_id 
+        JOIN student ON student_id=id_studenta JOIN kolegij ON kolegij_id=id_kolegija JOIN tip_aktivnosti ON tip_aktivnosti_id=id_tip_aktivnosti JOIN dvorana ON id_dvorane=dvorana_id WHERE id_studenta='$student' AND dan_izvodenja='$danIzvodenja' ORDER BY pocetak";
+    $rez = DohvatiIzBaze($upit);
+    if ($rez->num_rows > 0) {
+        while ($row = mysqli_fetch_assoc($rez)) {
+            $pom = array('id' => $row["id_aktivnosti"], 'kolegij' => $row["kolegij"], 'tip_aktivnosti' => $row["tip_aktivnosti"], 'pocetak' => $row["pocetak"], 'kraj' => $row["kraj"], 'dvorana' => $row["dvorana"], 'dan_izvodenja' => $row["dan_izvodenja"]);
             array_push($aktivnosti, $pom);
         }
         $message = "Pronađene aktivnosti.";
