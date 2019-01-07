@@ -31,13 +31,14 @@ if (isset($_GET)) {
                 }
             }
             if($_GET['akcija']=='novi'){
+				DodajKolegij($_POST['naziv'], $_POST['semestar'],$_POST['studij']);
 
             }
             if($_GET['akcija']=='azuriraj'){
-                
+                AzurirajKolegij($_POST['idKolegija'], $_POST['naziv'], $_POST['semestar'],$_POST['studij']);
             }
             if($_GET['akcija']=='obrisi'){
-                
+                ObrisiKolegij($_POST['idKolegija']);
             }
         }
         if($_GET['metoda']=='dvorana'){
@@ -73,10 +74,8 @@ if (isset($_GET)) {
                 }
             }
             if($_GET['akcija']=='azuriraj'){
-                
             }
             if($_GET['akcija']=='obrisi'){
-                
             }
         }
         if($_GET['metoda']=='kolegij'){
