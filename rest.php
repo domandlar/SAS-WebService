@@ -68,6 +68,27 @@ if (isset($_GET)) {
                     //DohvatiKolegijeStudenta($_GET['id']);
                 }
             }
+            if($_GET['akcija']=='dohvatiPoDanu'){
+                if($_GET['uloga']=='profesor'){
+                    if($_GET['danIzvodenja'] == 'all'){
+                        
+                    }
+                    else /*if($_GET['tipAktivnosti'] == 'seminar')*/{
+                        DohvatiAktivnostiProfesoraPoDanuIzvodenja($_GET['idUloge'], $_GET['danIzvodenja']);
+                    }
+                }
+                else if($_GET['uloga']=='student'){
+                    if($_GET['danIzvodenja'] == 'all'){
+                        
+                    }
+                    else /*if($_GET['tipAktivnosti'] == 'seminar')*/{
+                        DohvatiAktivnostiStudentaPoDanuIzvodenja($_GET['idUloge'], $_GET['danIzvodenja']);
+                    }
+                }
+                if($_GET['uloga']=='student'){
+                    //DohvatiKolegijeStudenta($_GET['id']);
+                }
+            }
             if($_GET['akcija']=='nova'){
                 if($_GET['uloga']=='profesor'){
                     DodajAktivnostProfesora($_POST['profesor'], $_POST['dozvoljenoIzostanaka'], $_POST['pocetak'], $_POST['kraj'], $_POST['danIzvodenja'], $_POST['dvorana'], $_POST['kolegij'], $_POST['tipAktivnosti']);
