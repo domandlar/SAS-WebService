@@ -246,15 +246,6 @@ function AzurirajKolegij($idKolegija, $naziv, $semestar, $studij)
     $message = "Kolegij je ažururan.";
     DeliverResponse("OK", $message, "");
 }
-function ObrisiKolegij($idKolegija)
-{
-	$tekst = "";
-    $upit ="DELETE FROM kolegij WHERE id_kolegija='$idKolegija'"; 
-    DodajUBazu($upit);
-    $message = "Kolegij je obrisan.";
-    DeliverResponse("OK", $message, "");
-	//Dovršiti
-}
 function DohvatiDvorane($tipDvorane){
     $tekst = "";
     $dvorane = array();
@@ -475,5 +466,31 @@ function DohvacanjeEvidencijePoTerminu($kolegij, $aktivnost, $tjedanNastave)
         array_push($dolasci, $studenti);
     }
     //DelivrResponse...
+
+}
+
+function DohvacanjeEvidencijeStudenta($idStudenta, $kolegij, $aktivnost)
+{
+    $tekst = "";
+    $dolasci = array();
+    $upit = "SELECT k.naziv AS kolegij ,ta.naziv AS aktivnost,a.dan_izvodenja,d.prisutan, d.tjedan_nastave 
+    FROM kolegij k, tip_aktivnosti ta, aktivnost a, dolasci d, student s, student_has_aktivnost sha, student_has_kolegij shk
+     WHERE a.kolegij_id=k.id_kolegija AND a.tip_aktivnosti_id=ta.id_tip_aktivnosti AND d.aktivnost_id=a.id_aktivnosti 
+     AND s.id_studenta=sha.student_id AND sha.aktivnost_id=a.id_aktivnosti AND shk.student_id=s.id_studenta AND k.id_kolegija=shk.kolegij_id 
+     AND s.id_studenta='$idStudenta' AND k.id_kolegija='$kolegij' and a.tip_aktivnosti_id='$aktivnost'";
+    $rez = DohvatiIzBaze($upit);
+    if ($rez->num_rows > 0) {
+        while ($row = $rez->mysqli_fetch_assoc()) {
+            $pom = array('kolegij' => $row["kolegij"], 'aktivnost' => $row["aktivnost"],'prisutan' => $row["prisutan"], 'tjedanNastave' => $row["tjedan_nastave"], 'dan_izvodenja' => $row["dan_izvodenja"]);
+            array_push($dolasci, $pom);
+        }
+        $message = "Pronađene evidencije.";
+        DeliverResponse('OK', $message, $dolasci);
+    }else {
+        $pom = array('id' => "-1", 'naziv' => "");
+        array_push($dolasci, $pom);
+        $message = "Nema zapisa u bazi.";
+        DeliverResponse('NOT OK', $message, $dolasci);
+    }
 
 }

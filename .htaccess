@@ -14,5 +14,6 @@ RewriteRule ^kolegij/(.*)/$ rest.php?metoda=kolegij&akcija=dohvati&id=$1
 
 RewriteRule ^kolegij/novi/(.*)/(.*)/(.*)/$ rest.php?metoda=kolegij&akcija=novi&naziv=$1&semestar=$2&studij=$3
 RewriteRule ^kolegij/azuriraj/(.*)/(.*)/(.*)/(.*)/$ rest.php?metoda=kolegij&akcija=azuriraj&idKolegija=$1&naziv=$2&semestar=$3&studij=$4
-RewriteRule ^kolegij/obrisi/(.*)/$ rest.php?metoda=kolegij&akcija=obrisi&idKolegija=$1
+
+RewriteRule ^student/(.*)(.*)/(.*)/$ rest.php?metoda=kolegij&akcija=dolasci&idKolegija=$1&idStudenta=$2&idTipaAktivnosti=$3
 
