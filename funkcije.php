@@ -468,7 +468,6 @@ function DohvacanjeEvidencijePoTerminu($kolegij, $aktivnost, $tjedanNastave)
     //DelivrResponse...
 
 }
-
 function DohvacanjeEvidencijeStudenta($idStudenta, $kolegij, $aktivnost)
 {
     $tekst = "";
@@ -480,7 +479,7 @@ function DohvacanjeEvidencijeStudenta($idStudenta, $kolegij, $aktivnost)
      AND s.id_studenta='$idStudenta' AND k.id_kolegija='$kolegij' and a.tip_aktivnosti_id='$aktivnost'";
     $rez = DohvatiIzBaze($upit);
     if ($rez->num_rows > 0) {
-        while ($row = $rez->mysqli_fetch_assoc()) {
+        while ($row = mysqli_fetch_assoc($rez)) {
             $pom = array('kolegij' => $row["kolegij"], 'aktivnost' => $row["aktivnost"],'prisutan' => $row["prisutan"], 'tjedanNastave' => $row["tjedan_nastave"], 'dan_izvodenja' => $row["dan_izvodenja"]);
             array_push($dolasci, $pom);
         }

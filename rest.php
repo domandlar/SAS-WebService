@@ -31,7 +31,9 @@ if (isset($_GET)) {
                 }
             }
             if($_GET['akcija']=='novi'){
-				DodajKolegij($_POST['naziv'], $_POST['semestar'],$_POST['studij']);
+                if($_GET['uloga']=='profesor'){
+                    DodajKolegij($_POST['naziv'], $_POST['semestar'],$_POST['studij']);
+                }
 
             }
             if($_GET['akcija']=='azuriraj'){
@@ -96,13 +98,13 @@ if (isset($_GET)) {
             if($_GET['akcija']=='obrisi'){
             }
         }
-        if($_GET['metoda']=='kolegij'){
-            if ($_GET['akcija'] == 'dohvati') {
-                DohvatiKolegijeProfesora($_GET['id']);
-            }else if($_GET['akcija'] == 'dolasci'){
-
+        
+        if($_GET['metoda']== 'evidencija'){
+            if($_GET['akcija']== 'dohvati'){
+                if($_GET['uloga']== 'student'){
+                    DohvacanjeEvidencijeStudenta($_GET['idUloge'],$_GET['kolegij'],$_GET['tipAktivnosti']);
+                }
             }
-            
         }
     }
 }

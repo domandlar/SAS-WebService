@@ -10,10 +10,9 @@ RewriteRule ^aktivnost/dohvatiPoDanu/(.*)/(.*)/(.*)/$ rest.php?metoda=aktivnost&
 RewriteRule ^aktivnost/nova/(.*)/$ rest.php?metoda=aktivnost&akcija=nova&uloga=$1
 RewriteRule ^dvorane/dohvati/(.*)/$ rest.php?metoda=dvorana&akcija=dohvati&tipDvorane=$1
 
-RewriteRule ^kolegij/(.*)/$ rest.php?metoda=kolegij&akcija=dohvati&id=$1
 
-RewriteRule ^kolegij/novi/(.*)/(.*)/(.*)/$ rest.php?metoda=kolegij&akcija=novi&naziv=$1&semestar=$2&studij=$3
-RewriteRule ^kolegij/azuriraj/(.*)/(.*)/(.*)/(.*)/$ rest.php?metoda=kolegij&akcija=azuriraj&idKolegija=$1&naziv=$2&semestar=$3&studij=$4
 
-RewriteRule ^student/(.*)(.*)/(.*)/$ rest.php?metoda=kolegij&akcija=dolasci&idKolegija=$1&idStudenta=$2&idTipaAktivnosti=$3
+
+#RewriteRule ^student/(.*)(.*)/(.*)/$ rest.php?metoda=kolegij&akcija=dolasci&idKolegija=$1&idStudenta=$2&idTipaAktivnosti=$3
+RewriteRule ^evidencija/(.*)/(.*)/(.*)/(.*)/(.*)/$ rest.php?metoda=evidencija&akcija=$1&uloga=$2&idUloge=$3&kolegij=$4&tipAktivnosti=$5
 
