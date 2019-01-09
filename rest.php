@@ -32,9 +32,13 @@ if (isset($_GET)) {
             }
             if($_GET['akcija']=='novi'){
                 if($_GET['uloga']=='profesor'){
-                    DodajKolegij($_POST['naziv'], $_POST['semestar'],$_POST['studij']);
+                    DodajKolegij($_POST['naziv'], $_POST['semestar'],$_POST['studij'], $_POST['profesor']);
                 }
-
+            }
+			if($_GET['akcija']=='dodaj'){
+                if($_GET['uloga']=='profesor'){
+                    DodajKolegijProfesoru($_POST['kolegij'], $_POST['profesor']);
+                }
             }
             if($_GET['akcija']=='azuriraj'){
                 AzurirajKolegij($_POST['idKolegija'], $_POST['naziv'], $_POST['semestar'],$_POST['studij']);
