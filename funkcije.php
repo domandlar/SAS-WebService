@@ -230,6 +230,26 @@ function DohvatiKolegijeProfesora($profesor)
         DeliverResponse('NOT OK', $message, $kolegiji);
     }
 }
+function DovatiNeupisaneKolegijeProfesora($profesor)
+{
+	$tekst = "";
+    $kolegiji = array();
+    $upit = "SELECT * FROM kolegij JOIN profesor_has_kolegij ON id_kolegija=kolegij_id JOIN profesor ON profesor_id=id_profesora WHERE id_profesora < '$profesor' OR id_profesora > '$profesor' ";
+    $rez = DohvatiIzBaze($upit);
+    if ($rez->num_rows > 0) {
+        while ($row = mysqli_fetch_assoc($rez)) {
+            $pom = array('id' => $row["id_kolegija"], 'naziv' => $row["naziv"], 'semestar' => $row["semestar"], 'studij' => $row["studij"]);
+            array_push($kolegiji, $pom);
+        }
+        $message = "Pronađeni kolegiji.";
+        DeliverResponse('OK', $message, $kolegiji);
+    } else {
+        $pom = array('id' => "-1", 'naziv' => "");
+        array_push($kolegiji, $pom);
+        $message = "Nema zapisa u bazi.";
+        DeliverResponse('NOT OK', $message, $kolegiji);
+    }
+}
 function DodajKolegij($naziv, $semestar, $studij, $profesor)
 {
 	$tekst = "";

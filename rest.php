@@ -22,6 +22,11 @@ if (isset($_GET)) {
             }
         }
         if($_GET['metoda']=='kolegij'){
+			if($_GET['akcija']=='neupisani'){
+				if($_GET['uloga']=='profesor'){
+					DovatiNeupisaneKolegijeProfesora($_GET['idUloge']);
+				}
+			}
             if($_GET['akcija']=='dohvati'){
                 if($_GET['uloga']=='profesor'){
                     DohvatiKolegijeProfesora($_GET['idUloge']);
