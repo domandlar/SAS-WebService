@@ -285,7 +285,7 @@ function DohvatiKolegijeStudenta($student)
 {
     $tekst = "";
     $kolegiji = array();
-    $upit = "SELECT * FROM kolegij k, student s, student_has_kolegij shk WHERE k.id_kolegija=shk.student_id AND s.id_studenta=shk.student_id AND s.id_studenta='$student'";
+    $upit = "SELECT * FROM kolegij JOIN student_has_kolegij ON id_kolegija=kolegij_id JOIN student ON student_id=id_studenta WHERE id_studenta='$student'";
     $rez = DohvatiIzBaze($upit);
     if ($rez->num_rows > 0) {
         while ($row = mysqli_fetch_assoc($rez)) {
