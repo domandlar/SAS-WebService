@@ -32,7 +32,7 @@ if (isset($_GET)) {
                     DohvatiKolegijeProfesora($_GET['idUloge']);
                 }
                 if($_GET['uloga']=='student'){
-                    //DohvatiKolegijeStudenta($_GET['id']);
+                    DohvatiKolegijeStudenta($_GET['idUloge']);
                 }
             }
             if($_GET['akcija']=='novi'){
