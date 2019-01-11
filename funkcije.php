@@ -230,11 +230,11 @@ function DohvatiKolegijeProfesora($profesor)
         DeliverResponse('NOT OK', $message, $kolegiji);
     }
 }
-function DovatiNeupisaneKolegijeProfesora($profesor)
+function DohvatiSveKolegije()
 {
-	$tekst = "";
+    $tekst = "";
     $kolegiji = array();
-    $upit = "SELECT * FROM kolegij JOIN profesor_has_kolegij ON id_kolegija=kolegij_id JOIN profesor ON profesor_id=id_profesora WHERE id_profesora < '$profesor' OR id_profesora > '$profesor' ";
+    $upit = "SELECT * FROM kolegij";
     $rez = DohvatiIzBaze($upit);
     if ($rez->num_rows > 0) {
         while ($row = mysqli_fetch_assoc($rez)) {
@@ -248,7 +248,7 @@ function DovatiNeupisaneKolegijeProfesora($profesor)
         array_push($kolegiji, $pom);
         $message = "Nema zapisa u bazi.";
         DeliverResponse('NOT OK', $message, $kolegiji);
-    }
+	}
 }
 function DodajKolegij($naziv, $semestar, $studij, $profesor)
 {
@@ -300,6 +300,14 @@ function DohvatiKolegijeStudenta($student)
         $message = "Nema zapisa u bazi.";
         DeliverResponse('NOT OK', $message, $kolegiji);
     }
+}
+function DodajKolegijStudntu($kolegij, $student)
+{
+	$tekst = "";
+	$upit = "INSERT INTO student_has_kolegij (student_id, kolegij_id) VALUES ('$student', '$kolegij')";
+    DodajUBazu($upit);
+	$message = "Kolegij je dodan studentu.";
+    DeliverResponse("OK", $message, "");
 }
 
 function DohvatiDvorane($tipDvorane){
