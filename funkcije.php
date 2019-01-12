@@ -230,6 +230,26 @@ function DohvatiKolegijeProfesora($profesor)
         DeliverResponse('NOT OK', $message, $kolegiji);
     }
 }
+function DohvatiKolegijeStudenta($student)
+{
+    $tekst = "";
+    $kolegiji = array();
+    $upit = "SELECT * FROM kolegij JOIN student_has_kolegij ON id_kolegija=kolegij_id JOIN student ON student_id=id_studenta WHERE id_studenta='$student'";
+    $rez = DohvatiIzBaze($upit);
+    if ($rez->num_rows > 0) {
+        while ($row = mysqli_fetch_assoc($rez)) {
+            $pom = array('id' => $row["id_kolegija"], 'naziv' => $row["naziv"], 'semestar' => $row["semestar"], 'studij' => $row["studij"]);
+            array_push($kolegiji, $pom);
+        }
+        $message = "Pronađeni kolegiji.";
+        DeliverResponse('OK', $message, $kolegiji);
+    } else {
+        $pom = array('id' => "-1", 'naziv' => "");
+        array_push($kolegiji, $pom);
+        $message = "Nema zapisa u bazi.";
+        DeliverResponse('NOT OK', $message, $kolegiji);
+    }
+}
 function DovatiNeupisaneKolegijeProfesora($profesor)
 {
 	$tekst = "";
@@ -554,7 +574,7 @@ function DohvatiStudenteIzAktivnosti($aktivnost){
     $rez = DohvatiIzBaze($upit);
     $studenti = array();
     while($student = $rez->mysqli_fetch_assoc()){
-        $studenti[] = $student['student_id'];
+         array_push($studenti, $student['student_id']);
     }
     return $studenti;
 }
@@ -574,7 +594,7 @@ function ZabiljeziPrisustvoLozinkom($student, $lozinka, $tjedanNastave, $aktivno
     if ($rez->num_rows > 0) {
         $row = $rez->mysqli_fetch_assoc();
         $vrijemeGeneriranja = $row['vrijeme_generiranja'];
-        if(date("d:m:Y H:i:s")-$vrijemeGeneriranja<=10){
+        if(date("d:m:Y H:i:s")-$vrijemeGeneriranja<=10){ 
             $lozinkaPrisustva = $row["lozinka"];
             if($lozinka == $lozinkaPrisustva){
                 $upit = "UPDATE dolasci SET prisutan=1 WHERE student_id='$student' AND aktivnost_id='$aktivnost' AND tjedan_nastave='$tjedanNastave'";
@@ -589,4 +609,23 @@ function ZabiljeziPrisustvoLozinkom($student, $lozinka, $tjedanNastave, $aktivno
         $message = "Nema generirane lozinke za prisustvo za odabranu aktivnost u odabranom tjednu nastave.";
         DeliverResponse('NOT OK', $message, "");
     }
+}
+function DohvatiLabose($kolegij){
+    $trenutnoVrijeme = date("d:m:Y H:i:s");
+    $upit = "SELECT DISTINCT id_aktivnosti, pocetak, kraj, dan_izvodenja, naziv, kapacitet, (SELECT COUNT(*) FROM student_has_aktivnost WHERE aktivnost_id=id_aktivnosti) broj_upisanih
+     FROM aktivnost JOIN dvorana ON id_dvorane=dvorana_id JOIN student_has_aktivnost ON aktivnost_id=id_aktivnosti WHERE pocetak_upisa<='$trenutnoVrijeme' AND kraj_upisa<'$trenutnoVrijeme' AND kolegij_id='$kolegij' AND tip_aktivnosti_id=2";
+    $rez = DohvatiIzBaze($upit);
+    if($rez->num_row){
+        $labosi = array();
+        while($row = $rez->mysqli_fetch_array){
+            $pom = array("id_aktivnosti" => $row['id_aktivnosti'], "pocetak" => $row['pocetak'], "kraj" => $row['kraj'], "dan_izvodenja" => $row['dan_izvodenja'], "dvorana" => $row['naziv'], "kapacitet" => $row['kapacitet'], "broj_upisanih" => $row['broj_upisanih']);
+            array_push($labosi, $pom);
+        }
+        $message = "Dohvaćeni su labosi odabranog kolegija";
+        DeliverResponse("OK", $message, $labosi);
+    } else{
+        $message = "Nema labosa za odabrani kolegij";
+        DeliverResponse("NOT OK", $message, "");
+    }
+    
 }

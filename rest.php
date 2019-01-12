@@ -32,7 +32,7 @@ if (isset($_GET)) {
                     DohvatiKolegijeProfesora($_GET['idUloge']);
                 }
                 if($_GET['uloga']=='student'){
-                    //DohvatiKolegijeStudenta($_GET['id']);
+                    DohvatiKolegijeStudenta($_GET['idUloge']);
                 }
             }
             if($_GET['akcija']=='novi'){
@@ -115,6 +115,11 @@ if (isset($_GET)) {
                 if($_GET['uloga']== 'student'){
                     DohvacanjeEvidencijeStudenta($_GET['idUloge'],$_GET['kolegij'],$_GET['tipAktivnosti']);
                 }
+            }
+        }
+        if($_GET['metoda']== 'labosi'){
+            if($_GET['akcija']== 'dohvati'){
+                    DohvacanjeEvidencijeStudenta($_GET['kolegij']);
             }
         }
     }
