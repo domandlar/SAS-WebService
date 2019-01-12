@@ -241,7 +241,7 @@ function DohvatiSveKolegije()
             $pom = array('id' => $row["id_kolegija"], 'naziv' => $row["naziv"], 'semestar' => $row["semestar"], 'studij' => $row["studij"]);
             array_push($kolegiji, $pom);
         }
-        $message = "Pronađeni kolegiji.";
+        $message = "Pronađeni svi kolegiji.";
         DeliverResponse('OK', $message, $kolegiji);
     } else {
         $pom = array('id' => "-1", 'naziv' => "");
