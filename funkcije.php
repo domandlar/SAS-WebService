@@ -334,8 +334,14 @@ function DohvatiAktivnostiProfesora($profesor)
 {
     $tekst = "";
     $aktivnosti = array();
-    $upit = "SELECT id_aktivnosti, pocetak, kraj, dan_izvodenja, dvorana.naziv dvorana, id_tip_aktivnosti, tip_aktivnosti.naziv tip_aktivnosti, id_kolegija, kolegij.naziv kolegij FROM aktivnost JOIN aktivnost_has_profesor ON id_aktivnosti=aktivnost_id JOIN profesor ON profesor_id=id_profesora JOIN dvorana ON id_dvorane=dvorana_id
-    JOIN kolegij ON id_kolegija=kolegij_id WHERE id_profesora='$profesor'";
+    $upit = "SELECT id_aktivnosti, pocetak, kraj, dan_izvodenja, dvorana.naziv dvorana, tip_aktivnosti.id_tip_aktivnosti, tip_aktivnosti.naziv tip_aktivnosti, id_kolegija, kolegij.naziv kolegij 
+    FROM aktivnost 
+    JOIN aktivnost_has_profesor ON id_aktivnosti=aktivnost_id 
+    JOIN profesor ON profesor_id=id_profesora 
+    JOIN dvorana ON id_dvorane=dvorana_id 
+    JOIN kolegij ON id_kolegija=kolegij_id 
+    JOIN tip_aktivnosti ON id_tip_aktivnosti=tip_aktivnosti_id 
+    WHERE id_profesora='$profesor'";
     $rez = DohvatiIzBaze($upit);
     if ($rez->num_rows > 0) {
         while ($row = mysqli_fetch_assoc($rez)) {

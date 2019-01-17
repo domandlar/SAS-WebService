@@ -66,7 +66,7 @@ if (isset($_GET)) {
             if($_GET['akcija']=='dohvati'){
                 if($_GET['uloga']=='profesor'){
                     if($_GET['tipAktivnosti'] == 'all'){
-                        DohvatiAktivnostiProfesora($profesora);
+                        DohvatiAktivnostiProfesora($_GET['idUloge']);
                     }
                     else /*if($_GET['tipAktivnosti'] == 'seminar')*/{
                         DohvatiAktivnostiProfesoraPoTipuAktivnosti($_GET['idUloge'], $_GET['tipAktivnosti']);
