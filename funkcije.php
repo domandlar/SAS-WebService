@@ -302,27 +302,6 @@ function DodajKolegijProfesoru($kolegij, $profesor)
 	$message = "Kolegij je dodan profesoru.";
     DeliverResponse("OK", $message, "");
 }
-
-function DohvatiKolegijeStudenta($student)
-{
-    $tekst = "";
-    $kolegiji = array();
-    $upit = "SELECT * FROM kolegij JOIN student_has_kolegij ON id_kolegija=kolegij_id JOIN student ON student_id=id_studenta WHERE id_studenta='$student'";
-    $rez = DohvatiIzBaze($upit);
-    if ($rez->num_rows > 0) {
-        while ($row = mysqli_fetch_assoc($rez)) {
-            $pom = array('id' => $row["id_kolegija"], 'naziv' => $row["naziv"], 'semestar' => $row["semestar"], 'studij' => $row["studij"]);
-            array_push($kolegiji, $pom);
-        }
-        $message = "Pronađeni kolegiji.";
-        DeliverResponse('OK', $message, $kolegiji);
-    } else {
-        $pom = array('id' => "-1", 'naziv' => "");
-        array_push($kolegiji, $pom);
-        $message = "Nema zapisa u bazi.";
-        DeliverResponse('NOT OK', $message, $kolegiji);
-    }
-}
 function DodajKolegijStudntu($kolegij, $student)
 {
 	$tekst = "";
@@ -355,11 +334,12 @@ function DohvatiAktivnostiProfesora($profesor)
 {
     $tekst = "";
     $aktivnosti = array();
-    $upit = "SELECT * FROM aktivnost JOIN aktivnost_has_profesor ON id_aktivnosti=aktivnost_id JOIN profesor ON profesor_id=id_profesora JOIN dvorana ON id_dvorane=dvorana_id WHERE id_profesora='$profesor'";
+    $upit = "SELECT id_aktivnosti, pocetak, kraj, dan_izvodenja, dvorana.naziv dvorana, id_tip_aktivnosti, tip_aktivnosti.naziv tip_aktivnosti, id_kolegija, kolegij.naziv kolegij FROM aktivnost JOIN aktivnost_has_profesor ON id_aktivnosti=aktivnost_id JOIN profesor ON profesor_id=id_profesora JOIN dvorana ON id_dvorane=dvorana_id
+    JOIN kolegij ON id_kolegija=kolegij_id WHERE id_profesora='$profesor'";
     $rez = DohvatiIzBaze($upit);
     if ($rez->num_rows > 0) {
         while ($row = mysqli_fetch_assoc($rez)) {
-            $pom = array('id' => $row["id_aktivnosti"], 'naziv' => $row["naziv"], 'semestar' => $row["semestar"], 'studij' => $row["studij"]);
+            $pom = array('id' => $row["id_aktivnosti"], 'kolegij' => $row["kolegij"], 'id_tip_aktivnosti' => $row["id_tip_aktivnosti"], 'tip_aktivnosti' => $row["tip_aktivnosti"], 'pocetak' => $row["pocetak"], 'kraj' => $row["kraj"], 'dan_izvodenja' => $row["dan_izvodenja"]);
             array_push($aktivnosti, $pom);
         }
         $message = "Pronađene aktivnosti.";
