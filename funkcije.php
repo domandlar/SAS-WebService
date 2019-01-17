@@ -339,7 +339,7 @@ function DohvatiAktivnostiProfesora($profesor)
     $rez = DohvatiIzBaze($upit);
     if ($rez->num_rows > 0) {
         while ($row = mysqli_fetch_assoc($rez)) {
-            $pom = array('id' => $row["id_aktivnosti"], 'kolegij' => $row["kolegij"], 'id_tip_aktivnosti' => $row["id_tip_aktivnosti"], 'tip_aktivnosti' => $row["tip_aktivnosti"], 'pocetak' => $row["pocetak"], 'kraj' => $row["kraj"], 'dan_izvodenja' => $row["dan_izvodenja"]);
+            $pom = array('id' => $row["id_aktivnosti"], 'kolegij' => $row["kolegij"], 'id_tip_aktivnosti' => $row["id_tip_aktivnosti"], 'tip_aktivnosti' => $row["tip_aktivnosti"], 'dvorana' => $row["dvorana"], 'pocetak' => $row["pocetak"], 'kraj' => $row["kraj"], 'dan_izvodenja' => $row["dan_izvodenja"]);
             array_push($aktivnosti, $pom);
         }
         $message = "Pronađene aktivnosti.";
