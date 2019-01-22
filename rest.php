@@ -125,7 +125,7 @@ if (isset($_GET)) {
         }
         
         if($_GET['metoda']='evidentiraj'){
-            if($_GET['akcija']='generirajLozinku'){
+            if($_GET['akcija']=='generirajLozinku'){
                 GenerirajLozinkuZaPrisustvo($_POST['aktivnost'],$_POST['tjedanNastave']);
             }
             if($_GET['akcija']=='zabiljeziLozinkom'){

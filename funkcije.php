@@ -574,23 +574,25 @@ function GenerirajLozinkuZaPrisustvo($aktivnost, $tjedanNastave){
     }
     $lozinkaPrisustva = implode($lozinka);
     $vrijemeGeneriranja = date("d:m:Y H:i:s");
-    $upit = "INSERT INTO lozinka_za_prisustvo (aktivnost_id, lozinka, tjedan_nastave, vrijeme_generiranja) VALUES ('$aktivnost', '$lozinkaPrisustva', '$tjedanNastave', '$vrijemeGeneriranja')";
+    $upit = "INSERT INTO lozinka_za_prisustvo (aktivnost_id, lozinka, tjedan_nastave, vrijeme_generiranja) VALUES ('$aktivnost', '$lozinkaPrisustva', '$tjedanNastave', NOW())";
     DodajUBazu($upit);
     $studenti = DohvatiStudenteIzAktivnosti($aktivnost);
+
     foreach($studenti as $student){
         if(!ProvijeriZabiljezbuPrisutnostiStudentaNaAktivnostiPoTjednuNastave($student,$aktivnost,$tjedanNastave)){
             $upit = "INSERT INTO dolasci (tjedan_nastave, prisutan, student_id, aktivnost_id) VALUES ('$tjedanNastave', 0, '$student', '$aktivnost')";
             DodajUBazu($upit);
         }
     }
+    
     $message = "Lozinka je generirana.";
-    DeliverResponse("OK", $message, $lozinka);
+    DeliverResponse("OK", $message, $lozinkaPrisustva);
 }
 function DohvatiStudenteIzAktivnosti($aktivnost){
-    $upit = "SELECT student_id FROM student_has_aktivnost";
+    $upit = "SELECT student_id FROM student_has_aktivnost WHERE aktivnost_id='$aktivnost'";
     $rez = DohvatiIzBaze($upit);
     $studenti = array();
-    while($student = $rez->mysqli_fetch_assoc()){
+    while($student = mysqli_fetch_assoc($rez)){
          array_push($studenti, $student['student_id']);
     }
     return $studenti;
@@ -609,18 +611,23 @@ function ZabiljeziPrisustvoLozinkom($student, $lozinka, $tjedanNastave, $aktivno
     $upit = "SELECT * FROM lozinka_za_prisustvo WHERE tjedan_nastave='$tjedanNastave'";
     $rez = DohvatiIzBaze($upit);
     if ($rez->num_rows > 0) {
-        $row = $rez->mysqli_fetch_assoc();
+        $row = mysqli_fetch_assoc($rez);
         $vrijemeGeneriranja = strtotime($row['vrijeme_generiranja']);
         if(strtotime("now")-$vrijemeGeneriranja<=20){ 
             $lozinkaPrisustva = $row["lozinka"];
             if($lozinka == $lozinkaPrisustva){
                 $upit = "UPDATE dolasci SET prisutan=1 WHERE student_id='$student' AND aktivnost_id='$aktivnost' AND tjedan_nastave='$tjedanNastave'";
+                DodajUBazu($upit);
                 $message = "Zabilježeno prisustvo.";
                 DeliverResponse('OK', $message, "");
             } else{
                 $message = "Unesena lozinka nije točna.";
-                DeliverResponse('OK', $message, $dolasci);
+                DeliverResponse('OK', $message, "");
             }
+        }
+        else{
+            $message = "Isteklo vrijeme.";
+            DeliverResponse('NOT OK', $message, "");
         }
     }else {
         $message = "Nema generirane lozinke za prisustvo za odabranu aktivnost u odabranom tjednu nastave.";
