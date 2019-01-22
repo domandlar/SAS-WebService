@@ -334,8 +334,14 @@ function DohvatiAktivnostiProfesora($profesor)
 {
     $tekst = "";
     $aktivnosti = array();
-    $upit = "SELECT id_aktivnosti, pocetak, kraj, dan_izvodenja, dvorana.naziv dvorana, id_tip_aktivnosti, tip_aktivnosti.naziv tip_aktivnosti, id_kolegija, kolegij.naziv kolegij FROM aktivnost JOIN aktivnost_has_profesor ON id_aktivnosti=aktivnost_id JOIN profesor ON profesor_id=id_profesora JOIN dvorana ON id_dvorane=dvorana_id
-    JOIN kolegij ON id_kolegija=kolegij_id WHERE id_profesora='$profesor'";
+    $upit = "SELECT id_aktivnosti, pocetak, kraj, dan_izvodenja, dvorana.naziv dvorana, tip_aktivnosti.id_tip_aktivnosti, tip_aktivnosti.naziv tip_aktivnosti, id_kolegija, kolegij.naziv kolegij 
+    FROM aktivnost 
+    JOIN aktivnost_has_profesor ON id_aktivnosti=aktivnost_id 
+    JOIN profesor ON profesor_id=id_profesora 
+    JOIN dvorana ON id_dvorane=dvorana_id 
+    JOIN kolegij ON id_kolegija=kolegij_id 
+    JOIN tip_aktivnosti ON id_tip_aktivnosti=tip_aktivnosti_id 
+    WHERE id_profesora='$profesor'";
     $rez = DohvatiIzBaze($upit);
     if ($rez->num_rows > 0) {
         while ($row = mysqli_fetch_assoc($rez)) {
@@ -604,8 +610,8 @@ function ZabiljeziPrisustvoLozinkom($student, $lozinka, $tjedanNastave, $aktivno
     $rez = DohvatiIzBaze($upit);
     if ($rez->num_rows > 0) {
         $row = $rez->mysqli_fetch_assoc();
-        $vrijemeGeneriranja = $row['vrijeme_generiranja'];
-        if(date("d:m:Y H:i:s")-$vrijemeGeneriranja<=10){ 
+        $vrijemeGeneriranja = strtotime($row['vrijeme_generiranja']);
+        if(strtotime("now")-$vrijemeGeneriranja<=20){ 
             $lozinkaPrisustva = $row["lozinka"];
             if($lozinka == $lozinkaPrisustva){
                 $upit = "UPDATE dolasci SET prisutan=1 WHERE student_id='$student' AND aktivnost_id='$aktivnost' AND tjedan_nastave='$tjedanNastave'";
@@ -622,13 +628,12 @@ function ZabiljeziPrisustvoLozinkom($student, $lozinka, $tjedanNastave, $aktivno
     }
 }
 function DohvatiLabose($kolegij){
-    $trenutnoVrijeme = date("d:m:Y H:i:s");
-    $upit = "SELECT DISTINCT id_aktivnosti, pocetak, kraj, dan_izvodenja, naziv, kapacitet, (SELECT COUNT(*) FROM student_has_aktivnost WHERE aktivnost_id=id_aktivnosti) broj_upisanih
-     FROM aktivnost JOIN dvorana ON id_dvorane=dvorana_id JOIN student_has_aktivnost ON aktivnost_id=id_aktivnosti WHERE pocetak_upisa<='$trenutnoVrijeme' AND kraj_upisa<'$trenutnoVrijeme' AND kolegij_id='$kolegij' AND tip_aktivnosti_id=2";
+    $upit = "SELECT DISTINCT id_aktivnosti, pocetak, kraj, dan_izvodenja, naziv, kapacitet, (SELECT COUNT(*) FROM student_has_aktivnost WHERE aktivnost_id=id_aktivnosti) broj_upisanih FROM aktivnost JOIN dvorana ON id_dvorane=dvorana_id 
+    WHERE pocetak_upisa<=NOW() AND kraj_upisa>=NOW() AND kolegij_id='$kolegij' AND tip_aktivnosti_id=3";
     $rez = DohvatiIzBaze($upit);
-    if($rez->num_row){
+    if($rez->num_rows > 0){
         $labosi = array();
-        while($row = $rez->mysqli_fetch_array){
+        while($row = mysqli_fetch_assoc($rez)){
             $pom = array("id_aktivnosti" => $row['id_aktivnosti'], "pocetak" => $row['pocetak'], "kraj" => $row['kraj'], "dan_izvodenja" => $row['dan_izvodenja'], "dvorana" => $row['naziv'], "kapacitet" => $row['kapacitet'], "broj_upisanih" => $row['broj_upisanih']);
             array_push($labosi, $pom);
         }

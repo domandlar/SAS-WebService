@@ -66,7 +66,7 @@ if (isset($_GET)) {
             if($_GET['akcija']=='dohvati'){
                 if($_GET['uloga']=='profesor'){
                     if($_GET['tipAktivnosti'] == 'all'){
-                        DohvatiAktivnostiProfesora($profesora);
+                        DohvatiAktivnostiProfesora($_GET['idUloge']);
                     }
                     else /*if($_GET['tipAktivnosti'] == 'seminar')*/{
                         DohvatiAktivnostiProfesoraPoTipuAktivnosti($_GET['idUloge'], $_GET['tipAktivnosti']);
@@ -123,9 +123,18 @@ if (isset($_GET)) {
                 }
             }
         }
+        
+        if($_GET['metoda']='evidentiraj'){
+            if($_GET['akcija']='generirajLozinku'){
+                GenerirajLozinkuZaPrisustvo($_POST['aktivnost'],$_POST['tjedanNastave']);
+            }
+            if($_GET['akcija']=='zabiljeziLozinkom'){
+                ZabiljeziPrisustvoLozinkom($_POST['student'], $_POST['lozinka'],$_POST['tjedanNastave'],$_POST['aktivnost']);
+            }
+        }
         if($_GET['metoda']== 'labosi'){
             if($_GET['akcija']== 'dohvati'){
-                    DohvacanjeEvidencijeStudenta($_GET['kolegij']);
+                    DohvatiLabose($_GET['kolegij']);
             }
         }
     }
