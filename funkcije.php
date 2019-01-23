@@ -691,3 +691,20 @@ function DohvatiTipoveAktivnostiKolegija($kolegij)
         DeliverResponse("NOT OK", $message, "");
     }
 }
+function DohvatiStudenteSaKolegija($kolegij)
+{
+    $upit="SELECT * FROM student_has_kolegij JOIN student ON student_id=id_studenta WHERE kolegij_id='$kolegij'";
+    $rez = DohvatiIzBaze($upit);
+    if($rez->num_rows > 0){
+        $studenti = array();
+        while($row = mysqli_fetch_assoc($rez)){
+            $pom = array("id_studenta" => $row['id_studenta'], "ime" => $row['prezime'], "prezime" => $row['prezime']);
+            array_push($studenti, $pom);
+        }
+        $message = "Dohvaćeni su studenti sa odabranog kolegija";
+        DeliverResponse("OK", $message, $studenti);
+    } else{
+        $message = "Nema studenata na odabranom kolegiju";
+        DeliverResponse("NOT OK", $message, "");
+    }
+}

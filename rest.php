@@ -59,6 +59,9 @@ if (isset($_GET)) {
             if($_GET['akcija']=='tipoviAktivnosti'){
 				DohvatiTipoveAktivnostiKolegija($_GET['idKolegija']);
             }
+            if($_GET['akcija']=='studenti'){
+				DohvatiStudenteSaKolegija($_GET['idKolegija']);
+            }
         }
         if($_GET['metoda']=='dvorana'){
             if($_GET['akcija']=='dohvati'){
