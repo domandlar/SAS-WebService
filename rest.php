@@ -107,7 +107,7 @@ if (isset($_GET)) {
             }
             if($_GET['akcija']=='nova'){
                 if($_GET['uloga']=='profesor'){
-                    DodajAktivnostProfesora($_POST['profesor'], $_POST['dozvoljenoIzostanaka'], $_POST['pocetak'], $_POST['kraj'], $_POST['danIzvodenja'], $_POST['dvorana'], $_POST['kolegij'], $_POST['tipAktivnosti']);
+                    DodajAktivnostProfesora($_POST['profesor'], $_POST['dozvoljenoIzostanaka'], $_POST['pocetak'], $_POST['kraj'], $_POST['danIzvodenja'], $_POST['dvorana'], $_POST['kolegij'], $_POST['tipAktivnosti'], $_POST['pocetakUpisa'], $_POST['krajUpisa']);
                 }
             }
             if($_GET['akcija']=='azuriraj'){

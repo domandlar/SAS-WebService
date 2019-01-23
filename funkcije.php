@@ -422,12 +422,12 @@ function DohvatiAktivnostiProfesoraPoTipuAktivnosti($profesor, $tipAktivnost)
     }
 }
 
-function DodajAktivnostProfesora($profesor, $dozvoljenoIzostanaka, $pocetak, $kraj, $danIzvodenja, $dvorana, $kolegij, $tipAktivnost){
+function DodajAktivnostProfesora($profesor, $dozvoljenoIzostanaka, $pocetak, $kraj, $danIzvodenja, $dvorana, $kolegij, $tipAktivnost, $pocetakUpisa, $krajUpisa){
     $tekst = "";
     $aktivnosti = array();
     $tipAktivnost = DohvatiIdTipaAktivnosti($tipAktivnost);
-    $upit = "INSERT INTO aktivnost (dozvoljeno_izostanaka, pocetak, kraj, dan_izvodenja, dvorana_id, kolegij_id, tip_aktivnosti_id) 
-    VALUES ('$dozvoljenoIzostanaka', '$pocetak', '$kraj', '$danIzvodenja', '$dvorana', '$kolegij', '$tipAktivnost')";
+    $upit = "INSERT INTO aktivnost (dozvoljeno_izostanaka, pocetak, kraj, dan_izvodenja, dvorana_id, kolegij_id, tip_aktivnosti_id, pocetak_upisa, kraj_upisa) 
+    VALUES ('$dozvoljenoIzostanaka', '$pocetak', '$kraj', '$danIzvodenja', '$dvorana', '$kolegij', '$tipAktivnost', '$pocetakUpisa', '$krajUpisa')";
     DodajUBazu($upit);
     $upit = "SELECT id_aktivnosti FROM aktivnost ORDER BY 1 DESC LIMIT 1";
     $rez = DohvatiIzBaze($upit);
