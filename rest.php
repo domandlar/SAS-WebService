@@ -56,6 +56,9 @@ if (isset($_GET)) {
 					AzurirajKolegij($_POST['idKolegija'], $_POST['naziv'], $_POST['semestar'],$_POST['studij']);
 				}
             }
+            if($_GET['akcija']=='tipoviAktivnosti'){
+				DohvatiTipoveAktivnostiKolegija($_GET['idKolegija']);
+            }
         }
         if($_GET['metoda']=='dvorana'){
             if($_GET['akcija']=='dohvati'){

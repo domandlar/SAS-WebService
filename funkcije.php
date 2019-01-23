@@ -674,3 +674,20 @@ function PonistiOdabirLabosa($student, $aktivnost){
     DodajUBazu($upit);
     DeliverResponse("OK","Odabir labosa je poništen.", "");
 }
+function DohvatiTipoveAktivnostiKolegija($kolegij)
+{
+    $upit="SELECT DISTINCT id_tip_aktivnosti, naziv FROM tip_aktivnosti JOIN aktivnost ON tip_aktivnosti_id=id_tip_aktivnosti WHERE kolegij_id='$kolegij'";
+    $rez = DohvatiIzBaze($upit);
+    if($rez->num_rows > 0){
+        $tipoviAktivnosti = array();
+        while($row = mysqli_fetch_assoc($rez)){
+            $pom = array("id_tip_aktivnosti" => $row['id_tip_aktivnosti'], "naziv" => $row['naziv']);
+            array_push($tipoviAktivnosti, $pom);
+        }
+        $message = "Dohvaćeni su tipovi aktivnosti odabranog kolegija";
+        DeliverResponse("OK", $message, $tipoviAktivnosti);
+    } else{
+        $message = "Nema aktivnosti za odabrani kolegij";
+        DeliverResponse("NOT OK", $message, "");
+    }
+}

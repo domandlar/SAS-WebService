@@ -4,6 +4,7 @@ RewriteEngine On
 RewriteRule ^registracija/(.*)/$ rest.php?metoda=registracija&uloga=$1
 RewriteRule ^prijava/(.*)/(.*)/(.*)/$ rest.php?metoda=prijava&uloga=$1&email=$2&lozinka=$3
 RewriteRule ^kolegij/(.*)/(.*)/(.*)/$ rest.php?metoda=kolegij&akcija=$1&uloga=$2&idUloge=$3
+RewriteRule ^kolegij/(.*)/(.*)/$ rest.php?metoda=kolegij&akcija=$1&idKolegija=$2
 RewriteRule ^aktivnost/dohvati/(.*)/(.*)/(.*)/$ rest.php?metoda=aktivnost&akcija=dohvati&uloga=$1&idUloge=$2&tipAktivnosti=$3
 RewriteRule ^aktivnost/dohvatiPoDanu/(.*)/(.*)/(.*)/$ rest.php?metoda=aktivnost&akcija=dohvatiPoDanu&uloga=$1&idUloge=$2&danIzvodenja=$3
 #RewriteRule ^aktivnost/nova/(.*)/(.*)/(.*)/(.*)/(.*)/(.*)/(.*)/(.*)/$ rest.php?metoda=aktivnost&akcija=nova&profesor=$1&dozvoljenoIzostanaka=$2&pocetak=$3&kraj=$4&danIzvodenja=$5&dvorana=$6&kolegij=$7&tipAktivnosti=$8
