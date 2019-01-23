@@ -634,12 +634,14 @@ function ZabiljeziPrisustvoLozinkom($student, $lozinka, $tjedanNastave, $aktivno
         DeliverResponse('NOT OK', $message, "");
     }
 }
-function DohvatiLabose($kolegij){
+function DohvatiLabose($kolegij, $student){
     $upit = "SELECT DISTINCT id_aktivnosti, pocetak, kraj, dan_izvodenja, naziv, kapacitet, (SELECT COUNT(*) FROM student_has_aktivnost WHERE aktivnost_id=id_aktivnosti) broj_upisanih FROM aktivnost JOIN dvorana ON id_dvorane=dvorana_id 
     WHERE pocetak_upisa<=NOW() AND kraj_upisa>=NOW() AND kolegij_id='$kolegij' AND tip_aktivnosti_id=3";
     $rez = DohvatiIzBaze($upit);
     if($rez->num_rows > 0){
         $labosi = array();
+        $pom = array("upisana_aktivnost" => ProvijeriUpisLabosaStudenta($student, $kolegij));
+        array_push($labosi, $pom);
         while($row = mysqli_fetch_assoc($rez)){
             $pom = array("id_aktivnosti" => $row['id_aktivnosti'], "pocetak" => $row['pocetak'], "kraj" => $row['kraj'], "dan_izvodenja" => $row['dan_izvodenja'], "dvorana" => $row['naziv'], "kapacitet" => $row['kapacitet'], "broj_upisanih" => $row['broj_upisanih']);
             array_push($labosi, $pom);
@@ -651,4 +653,24 @@ function DohvatiLabose($kolegij){
         DeliverResponse("NOT OK", $message, "");
     }
     
+}
+function ProvijeriUpisLabosaStudenta($student, $kolegij){
+    $upit="SELECT id_aktivnosti FROM student_has_aktivnost JOIN aktivnost ON aktivnost_id=id_aktivnosti WHERE student_id='$student' AND kolegij_id='$kolegij' and pocetak_upisa<=NOW() AND kraj_upisa>=NOW()";
+    $rez = DohvatiIzBaze($upit);
+    if($rez->num_rows > 0){
+        $row = mysqli_fetch_assoc($rez);
+        return $row['id_aktivnosti'];
+    } else{
+        return null;
+    }
+}
+function UpisiLabos($student, $aktivnost){
+    $upit="INSERT INTO student_has_aktivnost VALUES ('$student', '$aktivnost')";
+    DodajUBazu($upit);
+    DeliverResponse("OK","Labos upisan.", "");
+}
+function PonistiOdabirLabosa($student, $aktivnost){
+    $upit="DELETE FROM student_has_aktivnost WHERE student_id='$student' AND aktivnost_id='$aktivnost'";
+    DodajUBazu($upit);
+    DeliverResponse("OK","Odabir labosa je poništen.", "");
 }

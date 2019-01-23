@@ -124,7 +124,7 @@ if (isset($_GET)) {
             }
         }
         
-        if($_GET['metoda']='evidentiraj'){
+        if($_GET['metoda']=='evidentiraj'){
             if($_GET['akcija']=='generirajLozinku'){
                 GenerirajLozinkuZaPrisustvo($_POST['aktivnost'],$_POST['tjedanNastave']);
             }
@@ -134,7 +134,13 @@ if (isset($_GET)) {
         }
         if($_GET['metoda']== 'labosi'){
             if($_GET['akcija']== 'dohvati'){
-                    DohvatiLabose($_GET['kolegij']);
+                    DohvatiLabose($_GET['kolegij'], $_GET['student']);
+            }
+            if($_GET['akcija']== 'upisi'){
+                UpisiLabos($_GET['student'], $_GET['aktivnost']);
+            }
+            if($_GET['akcija']== 'ponisti'){
+                PonistiOdabirLabosa($_GET['student'], $_GET['aktivnost']);
             }
         }
     }
