@@ -698,7 +698,7 @@ function DohvatiStudenteSaKolegija($kolegij)
     if($rez->num_rows > 0){
         $studenti = array();
         while($row = mysqli_fetch_assoc($rez)){
-            $pom = array("id_studenta" => $row['id_studenta'], "ime" => $row['prezime'], "prezime" => $row['prezime']);
+            $pom = array("id_studenta" => $row['id_studenta'], "ime" => $row['ime'], "prezime" => $row['prezime']);
             array_push($studenti, $pom);
         }
         $message = "Dohvaćeni su studenti sa odabranog kolegija";
