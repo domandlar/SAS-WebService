@@ -649,7 +649,7 @@ function ZabiljeziPrisustvoLozinkom($student, $lozinka, $tjedanNastave, $aktivno
                 DeliverResponse('OK', $message, "");
             } else{
                 $message = "Unesena lozinka nije točna.";
-                DeliverResponse('OK', $message, "");
+                DeliverResponse('NOT OK', $message, "");
             }
         }
         else{
