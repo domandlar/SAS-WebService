@@ -357,6 +357,33 @@ function DohvatiAktivnostiProfesora($profesor)
         DeliverResponse('NOT OK', $message, $aktivnosti);
     }
 }
+function DohvatiAktivnostiStudenta($student)
+{
+    $tekst = "";
+    $aktivnosti = array();
+    $upit = "SELECT id_aktivnosti, pocetak, kraj, dan_izvodenja, dvorana.naziv dvorana, tip_aktivnosti.id_tip_aktivnosti, tip_aktivnosti.naziv tip_aktivnosti, id_kolegija, kolegij.naziv kolegij 
+    FROM aktivnost 
+    JOIN student_has_aktivnost ON id_aktivnosti=aktivnost_id 
+    JOIN student ON student_id=id_studenta 
+    JOIN dvorana ON id_dvorane=dvorana_id 
+    JOIN kolegij ON id_kolegija=kolegij_id 
+    JOIN tip_aktivnosti ON id_tip_aktivnosti=tip_aktivnosti_id 
+    WHERE id_studenta='$student'";
+    $rez = DohvatiIzBaze($upit);
+    if ($rez->num_rows > 0) {
+        while ($row = mysqli_fetch_assoc($rez)) {
+            $pom = array('id' => $row["id_aktivnosti"], 'kolegij' => $row["kolegij"], 'id_tip_aktivnosti' => $row["id_tip_aktivnosti"], 'tip_aktivnosti' => $row["tip_aktivnosti"], 'dvorana' => $row["dvorana"], 'pocetak' => $row["pocetak"], 'kraj' => $row["kraj"], 'dan_izvodenja' => $row["dan_izvodenja"]);
+            array_push($aktivnosti, $pom);
+        }
+        $message = "Pronađene aktivnosti.";
+        DeliverResponse('OK', $message, $aktivnosti);
+    } else {
+        $pom = array('id' => "-1", 'naziv' => "");
+        array_push($aktivnosti, $pom);
+        $message = "Nema zapisa u bazi.";
+        DeliverResponse('NOT OK', $message, $aktivnosti);
+    }
+}
 function DohvatiAktivnostiProfesoraPoDanuIzvodenja($profesor, $danIzvodenja)
 {
     $tekst = "";

@@ -80,7 +80,7 @@ if (isset($_GET)) {
                 }
                 else if($_GET['uloga']=='student'){
                     if($_GET['tipAktivnosti'] == 'all'){
-                        
+                        DohvatiAktivnostiStudenta($_GET['idUloge']);
                     }
                     else /*if($_GET['tipAktivnosti'] == 'seminar')*/{
                         DohvatiAktivnostiStudentaPoTipuAktivnosti($_GET['idUloge'], $_GET['tipAktivnosti']);
