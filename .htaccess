@@ -13,6 +13,7 @@ RewriteRule ^dvorane/dohvati/(.*)/$ rest.php?metoda=dvorana&akcija=dohvati&tipDv
 RewriteRule ^labosi/dohvati/(.*)/(.*)/$ rest.php?metoda=labosi&akcija=dohvati&kolegij=$1&student=$2
 RewriteRule ^labosi/(.*)/(.*)/(.*)/$ rest.php?metoda=labosi&akcija=$1&student=$2&aktivnost=$3
 RewriteRule ^evidentiraj/(.*)/$ rest.php?metoda=evidentiraj&akcija=$1
+RewriteRule ^modularno/(.*)/(.*)/$ rest.php?modul=$1&akcija=$2
 
 
 

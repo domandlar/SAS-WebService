@@ -125,22 +125,23 @@ if (isset($_GET)) {
         if($_GET['metoda']== 'evidencija'){
             if($_GET['akcija']== 'dohvati'){
                 if($_GET['uloga']== 'student'){
-                    DohvacanjeEvidencijeStudenta($_GET['idUloge'],$_GET['kolegij'],$_GET['tipAktivnosti']);
+                    //DohvacanjeEvidencijeStudenta($_GET['idUloge'],$_GET['kolegij'],$_GET['tipAktivnosti']);
+                    DohvacanjeEvidencijeStudentaZaKolegijPoTipuAktivnosti($_GET['kolegij'],$_GET['tipAktivnosti'],$_GET['idUloge']);
                 }
             }
         }
         
         if($_GET['metoda']=='evidentiraj'){
-            if($_GET['akcija']=='generirajLozinku'){
-                GenerirajLozinkuZaPrisustvo($_POST['aktivnost'],$_POST['tjedanNastave']);
+            if($_GET['akcija']=='postaviPrisustvo'){
+                PostaviPrisustvo($_POST['aktivnost'], $_POST['tjedanNastave']);
             }
-            if($_GET['akcija']=='zabiljeziLozinkom'){
-                ZabiljeziPrisustvoLozinkom($_POST['student'], $_POST['lozinka'],$_POST['tjedanNastave'],$_POST['aktivnost']);
+            if($_GET['akcija']=='zabiljezi'){
+                ZabiljeziPrisustvo($_POST['student'], $_POST['tjedanNastave'], $_POST['aktivnost']);
             }
         }
         if($_GET['metoda']== 'labosi'){
             if($_GET['akcija']== 'dohvati'){
-                    DohvatiLabose($_GET['kolegij'], $_GET['student']);
+                DohvatiLabose($_GET['kolegij'], $_GET['student']);
             }
             if($_GET['akcija']== 'upisi'){
                 UpisiLabos($_GET['student'], $_GET['aktivnost']);
@@ -148,6 +149,17 @@ if (isset($_GET)) {
             if($_GET['akcija']== 'ponisti'){
                 PonistiOdabirLabosa($_GET['student'], $_GET['aktivnost']);
             }
+        }     
+    }
+    if($_GET['modul']=='lozinke'){
+        if($_GET['akcija']=='generiraj'){
+            GenerirajLozinkuZaPrisustvo($_POST['aktivnost'],$_POST['tjedanNastave']);
         }
+        if($_GET['akcija']=='provijeri'){
+            ProvijeriLozinku($_POST['student'],$_POST['lozinka'],$_POST['tjedanNastave']);
+        }
+    }
+    if($_GET['modul']=='lice'){
+
     }
 }
